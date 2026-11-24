@@ -251,12 +251,3 @@ sem a interface). O `ClienteNegocio` pede `IClienteRepositorio`, que não está
 na lista, e dá o mesmo erro do repositório esquecido. A linha precisa dizer as
 duas coisas: `AddScoped<IClienteRepositorio, ClienteRepositorio>()`.
 
-## 8. Resumo para colar no caderno
-
-- Toda classe **pede** o que precisa no construtor e **nunca** dá `new` em
-  controller, negócio, repositório ou contexto.
-- O `Program.cs` é a lista de montagem. Cada entidade nova = **duas linhas**
-  (repositório e negócio), nos **dois** `Program.cs`.
-- Interface no repositório: a linha diz `<Interface, Classe>`.
-- Erro com *Unable to resolve service for type 'X'* = falta registrar `X` no
-  `Program.cs`.
