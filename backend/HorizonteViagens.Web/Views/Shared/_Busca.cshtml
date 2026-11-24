@@ -1,0 +1,36 @@
+@model HorizonteViagens.Web.Models.VitrineViewModel
+@* PARTIAL VIEW da busca de pacotes. Usada na página inicial e na lista de pacotes.
+   É um formulário GET: os filtros vão no endereço (/Combos?destino=paris&...),
+   então dá para voltar, recarregar ou mandar o link para alguém. *@
+<form action="/Combos" method="get" class="travel-search">
+    <div class="search-caption">✈ Passagem + hospedagem + evento</div>
+    <div class="search-row">
+        <label>
+            Destino ou evento
+            <input name="destino" value="@Model.Destino" placeholder="Para onde você quer ir?">
+        </label>
+
+        <label>
+            Categoria
+            <select name="categoria">
+                <option value="">Todas as experiências</option>
+                <option selected="@(Model.Categoria == "Luxo")">Luxo</option>
+                <option selected="@(Model.Categoria == "Econômico")">Econômico</option>
+            </select>
+        </label>
+
+        @* data-viajantes: o horizonte.js reenvia a busca quando o número muda,
+           e o servidor devolve os preços recalculados para o novo grupo. *@
+        <label>
+            Viajantes adultos
+            <select name="viajantes" data-viajantes>
+                @for (var n = 1; n <= 6; n++)
+                {
+                    <option value="@n" selected="@(n == Model.Viajantes)">@n @(n == 1 ? "adulto" : "adultos")</option>
+                }
+            </select>
+        </label>
+
+        <button class="btn btn-gold">Buscar pacotes →</button>
+    </div>
+</form>

@@ -1,0 +1,39 @@
+@model HorizonteViagens.Modelos.Dtos.LoginDto
+@* LOGIN. A mesma tela serve para cliente e administrador: o controller
+   avisa pelo ViewData["Admin"] qual dos dois está entrando, e só os textos mudam. *@
+@{
+    ViewData["Title"] = "Entrar";
+    var admin = (bool)(ViewData["Admin"] ?? false);
+}
+
+<section class="auth-layout">
+    @* Metade com foto; no celular o CSS esconde e fica só o formulário. *@
+    <div class="auth-photo">
+        <h1>O mundo chama.<br>Seu horizonte espera.</h1>
+    </div>
+
+    <div class="auth-content">
+        <span class="eyebrow">@(admin ? "GESTÃO HORIZONTE" : "BEM-VINDO DE VOLTA")</span>
+        <h2>@(admin ? "Entre na administração." : "Que bom ter você aqui.")</h2>
+
+        <form method="post">
+            @* returnUrl: a página para onde a pessoa volta depois de entrar
+               (ex.: o pacote que ela queria reservar). *@
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]">
+            <input type="hidden" name="admin" value="@admin.ToString().ToLowerInvariant()">
+
+            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+
+            @* autocomplete ajuda o gerenciador de senhas do navegador a preencher. *@
+            <label>E-mail <input asp-for="Email" class="form-control" autocomplete="username" required></label>
+            <label>Senha <input asp-for="Senha" class="form-control" autocomplete="current-password" required></label>
+            <button class="btn btn-dark w-100 mt-3">Entrar →</button>
+        </form>
+
+        @if (!admin)
+        {
+            <p class="mt-4">Ainda não tem conta? <a href="/Clientes/Criar">Cadastre-se</a></p>
+        }
+        <a href="/">← Voltar ao site</a>
+    </div>
+</section>

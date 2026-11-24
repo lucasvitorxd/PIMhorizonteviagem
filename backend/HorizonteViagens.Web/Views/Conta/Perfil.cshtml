@@ -1,0 +1,33 @@
+@model HorizonteViagens.Modelos.Dtos.ClienteSalvarDto
+@* MEU PERFIL: o cliente corrige os próprios dados.
+   asp-for liga cada campo a uma propriedade do DTO: o nome do campo, o valor
+   atual e as regras de validação ([Required], [EmailAddress]...) vêm de lá. *@
+@{
+    ViewData["Title"] = "Meu perfil";
+}
+
+<section class="container section narrow">
+    <h1>Meu perfil</h1>
+    <form method="post">
+        @* Resumo dos erros (ex.: "CPF inválido") no topo do formulário. *@
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+
+        <div class="form-grid">
+            <label>Nome <input asp-for="Nome" class="form-control" autocomplete="name"></label>
+            <label>E-mail <input asp-for="Email" class="form-control" autocomplete="email"></label>
+            <label>CPF <input asp-for="Cpf" class="form-control" inputmode="numeric"></label>
+            <label>Celular <input asp-for="Celular" class="form-control" autocomplete="tel"></label>
+            <label>CEP <input asp-for="Cep" class="form-control" autocomplete="postal-code"></label>
+            <label>Rua <input asp-for="Rua" class="form-control"></label>
+            <label>Bairro <input asp-for="Bairro" class="form-control"></label>
+            <label>Cidade <input asp-for="Cidade" class="form-control"></label>
+        </div>
+
+        <button class="btn btn-gold mt-3">Salvar dados</button>
+    </form>
+</section>
+
+@* Liga a validação no navegador: o erro aparece antes de enviar. *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

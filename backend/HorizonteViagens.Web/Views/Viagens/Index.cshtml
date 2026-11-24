@@ -1,0 +1,43 @@
+@model List<HorizonteViagens.Web.Models.ReservaViewModel>
+@* LISTA DE RESERVAS. O cliente vê só as dele; o administrador vê todas
+   (quem filtra é o PortalNegocio, conforme o papel de quem está logado). *@
+@{
+    ViewData["Title"] = "Minhas viagens";
+    var ehAdmin = User.IsInRole("Administrador");
+}
+
+<section class="container section">
+    <span class="eyebrow">SUA CONTA HORIZONTE</span>
+    <h1>@(ehAdmin ? "Gestão de reservas" : "Minhas viagens")</h1>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty-panel">
+            <h2>Sua próxima história começa aqui.</h2>
+            <p>Ainda não há reservas.</p>
+            <a href="/Combos" class="btn btn-gold">Explorar destinos</a>
+        </div>
+    }
+
+    <div class="reservation-grid">
+        @foreach (var reserva in Model)
+        {
+            <article class="reservation-card">
+                <small>RESERVA @reserva.Codigo</small>
+                <span class="status">@reserva.Status</span>
+                <h2>@reserva.NomePacote</h2>
+                <p>@reserva.Destino · @reserva.PartidaTexto</p>
+                <p>@reserva.Viajantes adulto(s) · @reserva.Quartos quarto(s) · @reserva.Noites noites</p>
+
+                @* O nome do cliente só interessa para a agência. *@
+                @if (ehAdmin)
+                {
+                    <p>Cliente: @reserva.ClienteNome</p>
+                }
+
+                <strong>@reserva.Valor.ToString("C")</strong>
+                <a asp-action="Detalhes" asp-route-id="@reserva.Id" class="btn btn-dark">Ver reserva →</a>
+            </article>
+        }
+    </div>
+</section>

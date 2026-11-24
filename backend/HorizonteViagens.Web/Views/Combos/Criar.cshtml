@@ -1,0 +1,18 @@
+@model HorizonteViagens.Modelos.Dtos.ComboSalvarDto
+@* CRIAR COMBO (administrador). Os campos ficam na partial _Formulario,
+   que é a mesma usada pela tela de Editar. *@
+@{
+    ViewData["Title"] = "Criar combo";
+}
+
+<section class="container section narrow">
+    <h1>Criar combo</h1>
+    <form method="post">
+        <partial name="_Formulario" model="Model" />
+    </form>
+</section>
+
+@* Validação no navegador; o servidor confere de novo de qualquer jeito. *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,21 @@
+﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    // Tradução de mensagens padrão de validação do jQuery Validate.
+    if (window.jQuery && jQuery.validator) {
+        jQuery.extend(jQuery.validator.messages, {
+            required: "Este campo é obrigatório.",
+            number: "Informe um número válido.",
+            digits: "Informe apenas números inteiros.",
+            email: "Informe um e-mail válido.",
+            min: jQuery.validator.format("Informe um valor maior ou igual a {0}."),
+            max: jQuery.validator.format("Informe um valor menor ou igual a {0}."),
+            maxlength: jQuery.validator.format("Use no máximo {0} caracteres.")
+        });
+        // A validação de decimal deve acompanhar a cultura pt-BR do servidor.
+        jQuery.validator.methods.number = function(value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
+        };
+    }
+</script>

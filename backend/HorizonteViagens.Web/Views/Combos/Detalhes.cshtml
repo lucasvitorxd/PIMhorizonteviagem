@@ -1,0 +1,105 @@
+@model HorizonteViagens.Web.Models.ComboDetalheViewModel
+@* DETALHE DE UM PACOTE. O orçamento separado por partes e a resposta
+   "dá para reservar?" chegam prontos do PortalNegocio. Antes essa regra
+   estava escrita aqui na view; agora ela mora na camada de Negocio. *@
+@{
+    ViewData["Title"] = Model.Card.Destino;
+    var card = Model.Card;
+}
+
+<section class="container section">
+    <a href="/Combos">← Todos os pacotes</a>
+
+    <div class="detail-layout">
+        @* Coluna da esquerda: fotos e descrição do pacote. *@
+        <div>
+            <img class="detail-cover" src="/assets/@(card.Imagem).jpg" alt="Paisagem de @card.Destino">
+            <span class="eyebrow">@card.Categoria · @card.Origem → @card.Destino</span>
+            <h1>@Model.Nome</h1>
+            <h2>@card.Evento</h2>
+            <p>@Model.Descricao</p>
+
+            <h3>O que está previsto</h3>
+            <ul>
+                @foreach (var item in Model.Inclusoes)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+
+            <p>@card.Dias dias / @card.Noites noites · Partida: @card.PartidaTexto</p>
+
+            @* Favoritar é POST porque grava no banco. O token anti-falsificação
+               é colocado sozinho pela tag helper asp-action. *@
+            <form asp-controller="Viagens" asp-action="Favoritar" asp-route-id="@card.Id" method="post">
+                <button class="btn btn-outline-dark">♡ Salvar nos favoritos</button>
+            </form>
+        </div>
+
+        @* Coluna da direita: o orçamento do grupo. *@
+        <aside class="price-panel">
+            <h2>Sua viagem completa</h2>
+
+            @* Trocar o número de viajantes reenvia este formulário (horizonte.js)
+               e o servidor calcula de novo. O botão continua aqui para quem está
+               sem JavaScript. *@
+            <form method="get" asp-action="Detalhes" asp-route-id="@card.Id">
+                <label>
+                    Viajantes adultos
+                    <select name="viajantes" class="form-select" data-viajantes>
+                        @for (var n = 1; n <= 6; n++)
+                        {
+                            <option value="@n" selected="@(n == card.Viajantes)">@n adulto(s)</option>
+                        }
+                    </select>
+                </label>
+                <button class="btn btn-link">Atualizar orçamento</button>
+            </form>
+
+            @* As três partes do preço, na mesma ordem da Precificacao. *@
+            <dl>
+                <dt>Transporte / serviços individuais</dt>
+                <dd>@Model.Transporte.ToString("C")</dd>
+                <dt>@Model.Quartos quarto(s) × @card.Noites noites</dt>
+                <dd>@Model.Hospedagem.ToString("C")</dd>
+                <dt>Eventos e experiências</dt>
+                <dd>@Model.Experiencias.ToString("C")</dd>
+            </dl>
+            <hr>
+            <small>@(card.PrecoConfirmado ? "Total do grupo" : "Estimativa do grupo")</small>
+            <strong class="grand-total">@card.Total.ToString("C")</strong>
+            <p>Para @card.Viajantes adulto(s). Parcelamento e meios disponíveis são apresentados pelo serviço de pagamento.</p>
+
+            @if (Model.Reservavel)
+            {
+                if (User.IsInRole("Cliente"))
+                {
+                    @* Campos escondidos que o ViagensController recebe como ReservaEntrada.
+                       TotalEsperado: se o preço mudar entre abrir a tela e clicar,
+                       o Negocio recusa em vez de cobrar um valor diferente.
+                       RequisicaoId: evita reserva em dobro no clique duplo.
+                       O total sai no formato brasileiro (1299,90), o mesmo que o
+                       servidor espera ao ler o formulário, porque o site roda em pt-BR. *@
+                    <form asp-controller="Viagens" asp-action="Reservar" method="post">
+                        <input type="hidden" name="ComboId" value="@card.Id">
+                        <input type="hidden" name="Viajantes" value="@card.Viajantes">
+                        <input type="hidden" name="TotalEsperado" value="@card.Total">
+                        <input type="hidden" name="RequisicaoId" value="@Model.RequisicaoId">
+                        <button class="btn btn-gold w-100">Reservar @card.Viajantes vaga(s) →</button>
+                    </form>
+                }
+                else
+                {
+                    @* Visitante ou administrador: manda para o login e volta para cá depois. *@
+                    <a class="btn btn-gold w-100" href="/Conta/Login?returnUrl=@Uri.EscapeDataString($"/Combos/Detalhes/{card.Id}?viajantes={card.Viajantes}")">Entre como cliente para reservar</a>
+                }
+            }
+            else
+            {
+                <div class="alert alert-light">
+                    Saída sob consulta. A reserva será liberada após a confirmação de data, preço e vagas pela agência.
+                </div>
+            }
+        </aside>
+    </div>
+</section>

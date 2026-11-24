@@ -1,0 +1,19 @@
+@model HorizonteViagens.Modelos.Dtos.ComboDto
+@* CONFIRMAÇÃO DE EXCLUSÃO. Se o combo já tem reservas, o ComboNegocio recusa
+   e a mensagem aparece no resumo de erros abaixo. *@
+@{
+    ViewData["Title"] = "Excluir combo";
+}
+
+<section class="container section narrow">
+    <h1>Excluir combo</h1>
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+
+    <p>Deseja excluir <strong>@Model.Nome</strong>?</p>
+    <p>Combos com reservas ou serviços vinculados devem ser despublicados na edição.</p>
+
+    <form method="post">
+        <button class="btn btn-danger">Confirmar exclusão</button>
+        <a asp-action="Gerenciar" class="btn btn-outline-dark">Voltar</a>
+    </form>
+</section>

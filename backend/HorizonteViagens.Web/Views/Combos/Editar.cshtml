@@ -1,0 +1,17 @@
+@model HorizonteViagens.Modelos.Dtos.ComboSalvarDto
+@* EDITAR COMBO (administrador). Mesmo formulário da criação (_Formulario);
+   o campo escondido Versao evita que duas pessoas salvem por cima uma da outra. *@
+@{
+    ViewData["Title"] = "Editar combo";
+}
+
+<section class="container section narrow">
+    <h1>Editar combo</h1>
+    <form method="post">
+        <partial name="_Formulario" model="Model" />
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

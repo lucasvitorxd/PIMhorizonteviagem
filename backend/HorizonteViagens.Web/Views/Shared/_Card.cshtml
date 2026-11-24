@@ -1,0 +1,29 @@
+@model HorizonteViagens.Web.Models.ComboCardViewModel
+@* PARTIAL VIEW de um card da vitrine, repetida para cada combo.
+   Os valores (total do grupo e preço por pessoa) já chegam calculados pelo
+   PortalNegocio: esta tela só mostra, não faz conta nenhuma. *@
+<article class="trip-card">
+    <div class="trip-image">
+        @* loading="lazy": a foto só é baixada quando o card aparece na tela *@
+        <img src="/assets/@(Model.Imagem).jpg" alt="Paisagem de @Model.Destino" loading="lazy">
+        <span>@Model.Categoria</span>
+    </div>
+
+    <div class="trip-body">
+        <small>@Model.Dias dias / @Model.Noites noites · @Model.Origem</small>
+        <h2>@Model.Destino</h2>
+        <p class="trip-event">@Model.Evento</p>
+        <p class="included">✈ Transporte &nbsp; ▤ Hospedagem &nbsp; ♫ Evento</p>
+        <p class="departure">@Model.PartidaTexto</p>
+
+        <div class="trip-price">
+            <small>@(Model.PrecoConfirmado ? "Total do grupo" : "Total estimado") · @Model.Viajantes adulto(s)</small>
+            @* "C" formata como moeda na cultura do site (pt-BR, configurada no Program.cs): R$ 1.299,90 *@
+            <strong>@Model.Total.ToString("C")</strong>
+            <small>@Model.PorPessoa.ToString("C") por pessoa</small>
+        </div>
+
+        @* O número de viajantes vai junto, para o detalhe abrir com o mesmo orçamento. *@
+        <a class="btn btn-dark w-100" href="/Combos/Detalhes/@Model.Id?viajantes=@Model.Viajantes">Ver pacote →</a>
+    </div>
+</article>

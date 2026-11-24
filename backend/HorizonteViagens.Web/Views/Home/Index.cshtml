@@ -1,0 +1,88 @@
+@model HorizonteViagens.Web.Models.VitrineViewModel
+@* PÁGINA INICIAL. O HomeController pede a vitrine ao PortalNegocio (orçamento
+   para 2 adultos) e entrega aqui um VitrineViewModel com os cards prontos. *@
+@{
+    ViewData["Title"] = "Seu próximo horizonte";
+}
+
+@* Destaque do topo com a chamada principal do site. *@
+<section class="hero">
+    <div>
+        <span class="eyebrow">NOVOS DESTINOS. GRANDES HISTÓRIAS.</span>
+        <h1>Seu destino é só<br>o <em>começo.</em></h1>
+        <p>Passagem, hospedagem e aquele evento que você quer viver.<br>A Horizonte reúne tudo na mesma viagem.</p>
+        <a href="#destinos" class="btn btn-gold">Encontre seu próximo horizonte →</a>
+    </div>
+</section>
+
+@* A busca é uma partial view: o mesmo formulário aparece aqui e em /Combos. *@
+<div class="container search-overlap">
+    <partial name="_Busca" model="Model" />
+</div>
+
+@* Vitrine com até 6 pacotes; cada card é desenhado pela partial _Card. *@
+<section class="container section" id="destinos">
+    <span class="eyebrow">VIAGENS COMPLETAS, DO SEU JEITO</span>
+    <div class="section-title">
+        <div>
+            <h2>Qual história você quer viver?</h2>
+            <p>Compare o total para o seu grupo e conheça cada experiência.</p>
+        </div>
+        <a href="/Combos">Ver todos os pacotes →</a>
+    </div>
+
+    <div class="trip-grid">
+        @foreach (var card in Model.Combos.Take(6))
+        {
+            <partial name="_Card" model="card" />
+        }
+        @if (Model.Combos.Count == 0)
+        {
+            <div class="empty-panel">Novos destinos estão a caminho. Consulte novamente em breve.</div>
+        }
+    </div>
+</section>
+
+@* Faixa de eventos: só entram os combos que têm um evento cadastrado. *@
+<section class="events-band" id="eventos">
+    <div class="container">
+        <span class="eyebrow">O MOTIVO DA SUA PRÓXIMA VIAGEM</span>
+        <h2>Não vá só para conhecer.<br>Vá para viver.</h2>
+        <div class="event-grid">
+            @foreach (var card in Model.Combos.Where(c => !string.IsNullOrWhiteSpace(c.Evento)))
+            {
+                <a class="event-card" href="/Combos/Detalhes/@card.Id">
+                    @* alt vazio: a imagem é decorativa, o texto ao lado já diz o destino *@
+                    <img src="/assets/@(card.Imagem).jpg" alt="" loading="lazy">
+                    <span>
+                        <small>@card.Destino</small>
+                        <strong>@card.Evento</strong>
+                    </span>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+@* Passo a passo para quem chega pela primeira vez (link "Como funciona" do menu). *@
+<section class="container section" id="como-funciona">
+    <span class="eyebrow">DO PLANEJAMENTO AO EMBARQUE</span>
+    <h2>Sua viagem, organizada.</h2>
+    <div class="steps-grid">
+        <article>
+            <b>01</b>
+            <h3>Escolha seu combo</h3>
+            <p>Confira transporte, hospedagem, eventos e o total para os viajantes.</p>
+        </article>
+        <article>
+            <b>02</b>
+            <h3>Reserve sua saída</h3>
+            <p>Entre na sua conta e reserve as vagas disponíveis na data do pacote.</p>
+        </article>
+        <article>
+            <b>03</b>
+            <h3>Leve tudo com você</h3>
+            <p>Acompanhe a reserva e os documentos emitidos pelo site ou aplicativo.</p>
+        </article>
+    </div>
+</section>

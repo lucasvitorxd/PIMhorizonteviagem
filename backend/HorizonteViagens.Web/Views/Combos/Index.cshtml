@@ -1,0 +1,41 @@
+@model HorizonteViagens.Web.Models.VitrineViewModel
+@* LISTA DE PACOTES (/Combos). Também é usada pela tela de Favoritos,
+   que monta o mesmo ViewModel só com os combos favoritados. *@
+@{
+    ViewData["Title"] = "Pacotes de viagem";
+}
+
+<section class="container section">
+    <span class="eyebrow">ENCONTRE SEU HORIZONTE</span>
+    <h1>Pacotes de viagem</h1>
+
+    @* A busca continua preenchida porque lê os filtros do próprio Model. *@
+    <partial name="_Busca" model="Model" />
+
+    <div class="results-bar">
+        <p>@Model.Combos.Count @(Model.Combos.Count == 1 ? "experiência encontrada" : "experiências encontradas")</p>
+        @* O link já vem montado do ViewModel, mantendo destino, categoria e viajantes. *@
+        <a href="@Model.LinkOrdenarPorPreco">Ordenar pelo menor total</a>
+    </div>
+
+    <p class="price-note">
+        Valores para adultos. Até duas pessoas por quarto; grupos ímpares incluem um quarto
+        de uso individual. Datas, tarifas e serviços sujeitos à confirmação.
+    </p>
+
+    <div class="trip-grid">
+        @foreach (var card in Model.Combos)
+        {
+            <partial name="_Card" model="card" />
+        }
+
+        @* Mensagem amigável quando o filtro não encontra nada. *@
+        @if (Model.Combos.Count == 0)
+        {
+            <div class="empty-panel">
+                <h2>Nenhum pacote encontrado.</h2>
+                <a href="/Combos">Limpar busca</a>
+            </div>
+        }
+    </div>
+</section>

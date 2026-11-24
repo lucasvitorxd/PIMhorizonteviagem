@@ -1,0 +1,11 @@
+@model HorizonteViagens.Web.Models.DocumentoViewModel
+@* PARTIAL VIEW de um documento da viagem. Usada na Carteira e no
+   detalhe da reserva, para os dois mostrarem o documento do mesmo jeito. *@
+<article class="document-card">
+    <small>@Model.Tipo</small>
+    <h3>@Model.Titulo</h3>
+    <p>Localizador: @Model.Codigo</p>
+    @* target="_blank" abre o site do fornecedor em outra aba;
+       rel="noopener noreferrer" impede essa aba de mexer na página do Horizonte. *@
+    <a href="@Model.Url" target="_blank" rel="noopener noreferrer">Abrir documento →</a>
+</article>
