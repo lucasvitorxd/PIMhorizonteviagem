@@ -121,10 +121,3 @@ No SSMS, a tabela `Administradores` aparece com uma linha: o administrador inici
 login. As chamadas seguintes já usam o token que ela devolve. No Scalar,
 faça o login, copie o `token` e, no *Test Request*, acrescente o cabeçalho
 `Authorization` com o valor `Bearer <token>`.
-
-## Antes de entregar
-
-- A chave do JWT não fica mais no `appsettings.json`: veja a seção
-  "Segurança e configuração" do README (User Secrets).
-- Se quiser outra senha para o administrador inicial, veja o comentário no
-  `HasData` do `AppDbContext`.
